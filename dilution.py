@@ -30,10 +30,11 @@ def run_custom_protocol(
         mount='right',
         tip_racks=tiprack_300)
 
-    initial_conc = 10
-    final_conc = 0.345
+    initial_conc = 10**6
+    final_conc = 1
+    no_dilutions = 6
 
-    dilution_factor = log((initial_conc/(final_conc/10)),3.981071705534972507702523050877520434876770372973804468652)
+    dilution_factor = 1/((final_conc/initial_conc)**(1/no_dilutions))
 
     transfer_volume = total_mixing_volume/dilution_factor
     diluent_volume = total_mixing_volume - transfer_volume
