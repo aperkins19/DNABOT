@@ -57,8 +57,8 @@ def clip(
     if PIPETTE_TYPE != 'P10_Single':
         print('Define labware must be changed to use', PIPETTE_TYPE)
         exit()
-    pipette = instruments.P10_Single(mount=PIPETTE_MOUNT, tip_racks=tipracks)
-    pipette.start_at_tip(tipracks[0].well(INITIAL_TIP))
+    p10 = instruments.P10_Single(mount=PIPETTE_MOUNT, tip_racks=tipracks)
+    p10.start_at_tip(tipracks[0].well(INITIAL_TIP))
     destination_plate = labware.load(
         DESTINATION_PLATE_TYPE, DESTINATION_PLATE_POSITION)
     tube_rack = labware.load(TUBE_RACK_TYPE, TUBE_RACK_POSITION)
@@ -68,18 +68,18 @@ def clip(
         INITIAL_DESTINATION_WELL, length=int(len(parts_wells)))
 
     # Transfers
-    pipette.pick_up_tip()
-    pipette.distribute(MASTER_MIX_VOLUME, master_mix,
+    p10.pick_up_tip()
+    p10.distribute(MASTER_MIX_VOLUME, master_mix,
                      destination_wells, new_tip='never')
-    pipette.drop_tip()
-    pipette.transfer(water_vols, water,
+    p10.drop_tip()
+    p10.distribute(water_vols, water,
                      destination_wells, new_tip='always')
     for clip_num in range(len(parts_wells)):
-        pipette.transfer(1, source_plates[prefixes_plates[clip_num]].wells(prefixes_wells[clip_num]),
+        p10.transfer(1, source_plates[prefixes_plates[clip_num]].wells(prefixes_wells[clip_num]),
                          destination_wells[clip_num], mix_after=LINKER_MIX_SETTINGS)
-        pipette.transfer(1, source_plates[suffixes_plates[clip_num]].wells(suffixes_wells[clip_num]),
+        p10.transfer(1, source_plates[suffixes_plates[clip_num]].wells(suffixes_wells[clip_num]),
                          destination_wells[clip_num], mix_after=LINKER_MIX_SETTINGS)
-        pipette.transfer(parts_vols[clip_num], source_plates[parts_plates[clip_num]].wells(parts_wells[clip_num]),
+        p10.transfer(parts_vols[clip_num], source_plates[parts_plates[clip_num]].wells(parts_wells[clip_num]),
                          destination_wells[clip_num], mix_after=PART_MIX_SETTINGS)
 
 
