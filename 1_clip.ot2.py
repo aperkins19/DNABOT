@@ -57,7 +57,7 @@ def clip(
     if PIPETTE_TYPE != 'P10_Single':
         print('Define labware must be changed to use', PIPETTE_TYPE)
         exit()
-    p10 = instruments.P300_Single(mount=PIPETTE_MOUNT, tip_racks=tipracks)
+    p10 = instruments.P10_Single(mount=PIPETTE_MOUNT, tip_racks=tipracks)
     p10.start_at_tip(tipracks[0].well(INITIAL_TIP))
     destination_plate = labware.load(
         DESTINATION_PLATE_TYPE, DESTINATION_PLATE_POSITION)
