@@ -46,9 +46,9 @@ def run_custom_protocol(
     pipette_300.distribute(diluent_volume, tube_rack['A2'], plate.cols('12').wells()[1:], disposal_vol=10)
 
 
+    pipette_10.pick_up_tip()
 
     for row in range(0,6):
-        pipette_10.pick_up_tip()
 
         pipette_10.transfer(
             transfer_volume,
@@ -57,7 +57,7 @@ def run_custom_protocol(
             mix_after=(3, total_mixing_volume / 2),
             new_tip='never')
 
-        pipette_10.drop_tip()
+    pipette_10.drop_tip()
 
 
 run_custom_protocol(**{'total_mixing_volume': 10.0,})
