@@ -71,9 +71,9 @@ def clip(
     p300 = instruments.P300_Single(mount = 'right', tip_racks = [tiprack300])
 
 # Operation
-       
+    p10.pick_up_tip()
     p10.distribute(water_vols, water, destination_wells, new_tip='never')
-    
+    p10.drop_tip()
     p300.pick_up_tip()
     p300.distribute(MASTER_MIX_VOLUME, master_mix, destination_wells, new_tip='never')
     p300.drop_tip()
