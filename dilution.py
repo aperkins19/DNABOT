@@ -19,9 +19,7 @@ tiprack_300 = [labware.load("tiprack-200ul", '6')]
 
 
 def run_custom_protocol(
-    pipette_type: 'StringSelection...'='p10-Single',
-    total_mixing_volume: float=10.0,
-    tip_use_strategy: 'StringSelection...'='use one tip'):
+    total_mixing_volume: float=10.0):
 
 
     pipette_10 = instruments.P10_Single(
@@ -32,8 +30,6 @@ def run_custom_protocol(
         mount='right',
         tip_racks=tiprack_300)
 
-    new_tip = 'never' if tip_use_strategy == 'use one tip' else 'always'
-
     initial_conc = 10
     final_conc = 0.345
 
@@ -42,29 +38,25 @@ def run_custom_protocol(
     transfer_volume = total_mixing_volume/dilution_factor
     diluent_volume = total_mixing_volume - transfer_volume
 
-    #add sample to well A12 for dilution
+    #Add sample to well A12 for dilution
     pipette_10.distribute(total_mixing_volume, tube_rack['A1'], plate.cols('12').wells('A'))
 
-    # Distribute diluent across the plate to the the number of samples
-    # And add diluent to one column after the number of samples for a blank
-
+    # Reverse pipette diluent from wells B12 to H12
     pipette_300.distribute(diluent_volume, tube_rack['A2'], plate.cols('12').wells()[1:], disposal_vol=10)
 
 
 
     for row in range(0,6):
-        if new_tip == 'never':
-            pipette_10.pick_up_tip()
+        pipette_10.pick_up_tip()
 
         pipette_10.transfer(
             transfer_volume,
             plate.cols('12').wells(row),
             plate.cols('12').wells(row+1),
             mix_after=(3, total_mixing_volume / 2),
-            new_tip=new_tip)
+            new_tip='never')
 
-        if new_tip == 'never':
-            pipette_10.drop_tip()
+        pipette_10.drop_tip()
 
 
-run_custom_protocol(**{'pipette_type': 'p300-Single', 'total_mixing_volume': 10.0, 'tip_use_strategy': 'use one tip'})
+run_custom_protocol(**{'total_mixing_volume': 10.0,})
