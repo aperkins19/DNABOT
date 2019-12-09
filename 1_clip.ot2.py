@@ -57,7 +57,7 @@ def clip(
     if PIPETTE_TYPE != 'P10_Single':
         print('Define labware must be changed to use', PIPETTE_TYPE)
         exit()
-    p10 = instruments.P10_Single(mount=PIPETTE_MOUNT, tip_racks=tipracks)
+    p10 = instruments.P300_Single(mount=PIPETTE_MOUNT, tip_racks=tipracks)
     p10.start_at_tip(tipracks[0].well(INITIAL_TIP))
     destination_plate = labware.load(
         DESTINATION_PLATE_TYPE, DESTINATION_PLATE_POSITION)
@@ -66,12 +66,17 @@ def clip(
     water = tube_rack.wells(WATER_WELL)
     destination_wells = destination_plate.wells(
         INITIAL_DESTINATION_WELL, length=int(len(parts_wells)))
+    
+    
+    tiprack300 = labware.load('opentrons_96_tiprack_300ul', slot = "8")
+    p300 = instruments.P300_Single(mount = 'right', tip_racks = [tiprack300])
+    
+    p300.pick_up_tip()
+    p300.distribute(MASTER_MIX_VOLUME, master_mix, destination_wells, new_tip='never')
+    p300.drop_tip()
 
-    # Transfers
-    p10.pick_up_tip()
-    p10.distribute(MASTER_MIX_VOLUME, master_mix,
-                     destination_wells, new_tip='never')
-    p10.drop_tip()
+    
+    
     p10.distribute(water_vols, water,
                      destination_wells, new_tip='always')
     for clip_num in range(len(parts_wells)):
