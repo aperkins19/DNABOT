@@ -70,15 +70,15 @@ def clip(
     
     tiprack300 = labware.load('opentrons_96_tiprack_300ul', slot = "8")
     p300 = instruments.P300_Single(mount = 'right', tip_racks = [tiprack300])
+
+    p10.distribute(water_vols, water,
+                     destination_wells, new_tip='always')
     
     p300.pick_up_tip()
     p300.distribute(MASTER_MIX_VOLUME, master_mix, destination_wells, new_tip='never')
     p300.drop_tip()
 
-    
-    
-    p10.distribute(water_vols, water,
-                     destination_wells, new_tip='always')
+  
     for clip_num in range(len(parts_wells)):
         p10.transfer(1, source_plates[prefixes_plates[clip_num]].wells(prefixes_wells[clip_num]),
                          destination_wells[clip_num], mix_after=LINKER_MIX_SETTINGS)
